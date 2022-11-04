@@ -20,6 +20,7 @@ def getleechinfo(from_user):
     prefix = PRE_DICT.get(user_id, "Not Exists")
     caption = CAP_DICT.get(user_id, "Not Exists")
     dumpid = LEECH_DICT.get(user_id, "Not Exists")
+    remname = REM_DICT.get(user_id, "Not Exists")
     if (
         user_id in AS_DOC_USERS
         or user_id not in AS_MEDIA_USERS
