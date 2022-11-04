@@ -5,7 +5,7 @@ from pyrogram.errors import FloodWait, RPCError
 from PIL import Image
 from threading import RLock
 from bot import AS_DOCUMENT, AS_DOC_USERS, AS_MEDIA_USERS, EXTENSION_FILTER, \
-                app, LEECH_LOG, BOT_PM, tgBotMaxFileSize, premium_session, CAPTION_FONT, PRE_DICT, LEECH_DICT, LOG_LEECH, CAP_DICT
+                app, LEECH_LOG, BOT_PM, tgBotMaxFileSize, premium_session, CAPTION_FONT, PRE_DICT, LEECH_DICT, LOG_LEECH, CAP_DICT, REM_DICT
 from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, get_path_size, clean_unwanted
 from bot.helper.ext_utils.bot_utils import get_readable_file_size
 from pyrogram.types import Message
@@ -82,9 +82,14 @@ class TgUploader:
         PRENAME_X = prefix
         caption = CAP_DICT.get(self.__listener.message.from_user.id, "")
         CAPTION_X = caption
+        remname = REM_DICT.get(self.__listener.message.from_user.id, "")
+        REMNAME_X = remname
         if len(PRENAME_X) != 0:
             if file_.startswith('www'):
                 file_ = ' '.join(file_.split()[1:])
+                rm_word = f"{REMNAME_X}"
+                file_ = re.sub(rm_word, '', file_)
+                file_ = re.sub("\s\s+", " ", file_)
                 file_ = f"{PRENAME_X}" + file_.strip('-').strip('_')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
@@ -92,6 +97,9 @@ class TgUploader:
                 osrename(up_path, new_path)
                 up_path = new_path
             else:
+                rm_word = f"{REMNAME_X}"
+                file_ = re.sub(rm_word, '', file_)
+                file_ = re.sub("\s\s+", " ", file_)
                 file_ = f"{PRENAME_X}" + " " + file_.strip('-').strip('_')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
