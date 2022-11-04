@@ -1,7 +1,8 @@
 import cloudscraper
 from re import match as rematch, findall, sub as resub
+from asyncio import sleep as asleep
 from time import sleep
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 from requests import get as rget, head as rhead
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -66,19 +67,24 @@ def scrapper(update, context):
         res = rget(link)
         soup = BeautifulSoup(res.text, 'html.parser')
         x = soup.select('a[href^="/exit.php?url="]')
+        y = soup.select('h5')
+        z = unquote(link.split('/')[-2]).split('-')[0] if link.endswith('/') else unquote(link.split('/')[-1]).split('-')[0]
+
         for a in x:
             links.append(a['href'])
-        for o in links:
-            url = f"https://htpmovies.lol"+o
-            prsd += htpmovies(url) + '\n\n'
-            if len(prsd) > 4000:
-                deleteMessage(context.bot, sent)
-                sendMessage(prsd, context.bot, update.message)
-                prsd = ""
-        if prsd != "":
-            try: deleteMessage(context.bot, sent)
-            except: pass
-            sendMessage(prsd, context.bot, update.message)
+            prsd = f"Total Links Found : {len(links)}\n\n"
+        editMessage(prsd, sent)
+        msdcnt = -1
+        for b in y:
+            if str(b.string).lower().startswith(z.lower()):
+                msdcnt += 1
+                url = f"https://htpmovies.lol"+links[msdcnt]
+                prsd += f"{msdcnt+1}. <b>{b.string}</b>\n{htpmovies(url)}\n\n"
+                editMessage(prsd, sent)
+                asleep(5)
+                if len(prsd) > 4000:
+                    sent = sendMessage("<i>Scrapping More...</i>", context.bot, update.message)
+                    prsd = ""
     elif "cinevood" in link:
         prsd = ""
         links = []
@@ -124,13 +130,12 @@ def scrapper(update, context):
             sendMessage(txt, context.bot, update.message)
 
 def htpmovies(link):
-    if link.startswith("https://htpmovies.lol/"):
-        r = rhead(link, allow_redirects=True)
-        url = r.url  
     client = cloudscraper.create_scraper(allow_brotli=False)
-    j = url.split('?token=')[-1]
-    param = j.replace('&m=1','')
-    DOMAIN = "https://go.kinemaster.cc"
+    r = client.get(link, allow_redirects=True).text
+    j = r.split('("')[-1]
+    url = j.split('")')[0]
+    param = url.split("/")[-1]
+    DOMAIN = "https://go.theforyou.in"
     final_url = f"{DOMAIN}/{param}"
     resp = client.get(final_url)
     soup = BeautifulSoup(resp.content, "html.parser")    
@@ -140,17 +145,8 @@ def htpmovies(link):
     h = { "x-requested-with": "XMLHttpRequest" }
     sleep(10)
     r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
-    final = r.json()['url']
-    p = rget(final)
-    soup = BeautifulSoup(p.content, "html.parser")
-    ss = soup.select("li.list-group-item")
-    li = []
-    for item in ss:
-        li.append(item.string)
-    reftxt = resub(r'www\S+ \- ', '', li[0])
-    
     try:
-        return f'{reftxt}\n{li[2]}\nLink : {final}'
+        return r.json()['url']
     except: return "Something went Wrong !!"
         
 srp_handler = CommandHandler(BotCommands.ScrapeCommand, scrapper,
