@@ -62,6 +62,7 @@ Custom Thumbnail <b>{thumbmsg}</b>
 PreName : <b>{prefix}</b>
 Caption : <b>{caption}</b>
 DumpID : <b>{dumpid}</b>
+Remname : <b>{remname}</b>
 User Plan : <b>{uplan}</b>'''
     return text, button
 
