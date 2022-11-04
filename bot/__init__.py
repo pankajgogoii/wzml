@@ -38,6 +38,7 @@ def getConfig(name: str):
 PRE_DICT = {}
 CAP_DICT = {}
 LEECH_DICT = {}
+REM_DICT = {}
 TIME_GAP_STORE = {}
 
 load_dotenv('config.env', override=True)
