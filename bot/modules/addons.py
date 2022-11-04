@@ -2,7 +2,7 @@ from pyrogram import enums
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, ConversationHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot import LOGGER, DB_URI, OWNER_ID, PRE_DICT, LEECH_DICT, dispatcher, PAID_USERS, CAP_DICT, PAID_SERVICE
+from bot import LOGGER, DB_URI, OWNER_ID, PRE_DICT, LEECH_DICT, dispatcher, PAID_USERS, CAP_DICT, PAID_SERVICE, REM_DICT
 from bot.helper.telegram_helper.message_utils import *
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
@@ -94,13 +94,45 @@ def userlog_set(update, context):
         editMessage(f"<b>{u_men} your Channel ID Saved...🛸</b>", lm)
 
 
+def remname_set(update, context):
+    user_id_ = update.message.from_user.id 
+    u_men = update.message.from_user.first_name
+
+    if PAID_SERVICE is True:
+        if not (user_id_ in PAID_USERS) and user_id_ != OWNER_ID:
+            sendMessage(f"Buy Paid Service to Use this Remname Feature.", context.bot, update.message)
+            return
+    if (BotCommands.RemnameCommand in update.message.text) and (len(update.message.text.split(' ')) == 1):
+        sendMessage(f'<b>Set Remname Like👇 \n/{BotCommands.RemnameCommand} text</b>', context.bot, update.message)
+    else:
+        lm = sendMessage(f"<b>Please Wait....Processing🤖</b>", context.bot, update.message)
+        pre_send = update.message.text.split(" ", maxsplit=1)
+        reply_to = update.message.reply_to_message
+        if len(pre_send) > 1:
+            txt = pre_send[1]
+        elif reply_to is not None:
+            txt = reply_to.text
+        else:
+            txt = ""
+        remname_ = txt
+        REM_DICT[user_id_] = remname_
+        if DB_URI:
+            DbManger().user_rem(user_id_, remname_)
+            LOGGER.info(f"User : {user_id_} Remname is Saved in DB")
+        editMessage(f"<b>{u_men} Remname for the Leech file is Set now🌋</b>\n\n<b>Your Remname Text: </b>{txt}", lm)
+
+
+
 prename_set_handler = CommandHandler(BotCommands.PreNameCommand, prename_set,
                                        filters=(CustomFilters.authorized_chat | CustomFilters.authorized_user), run_async=True)
 caption_set_handler = CommandHandler(BotCommands.CaptionCommand, caption_set,
                                        filters=(CustomFilters.authorized_chat | CustomFilters.authorized_user), run_async=True)
 userlog_set_handler = CommandHandler(BotCommands.UserLogCommand, userlog_set,
+                                       filters=(CustomFilters.authorized_chat | CustomFilters.authorized_user), run_async=True)
+remname_set_handler = CommandHandler(BotCommands.RemnameCommand, remname_set,
                                        filters=(CustomFilters.authorized_chat | CustomFilters.authorized_user), run_async=True) 
 
 dispatcher.add_handler(prename_set_handler)
 dispatcher.add_handler(caption_set_handler)
 dispatcher.add_handler(userlog_set_handler)
+dispatcher.add_handler(remname_set_handler)
