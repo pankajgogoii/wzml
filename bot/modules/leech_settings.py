@@ -4,7 +4,7 @@ from threading import Thread
 from PIL import Image
 from telegram.ext import CommandHandler, CallbackQueryHandler
 
-from bot import AS_DOC_USERS, AS_MEDIA_USERS, dispatcher, AS_DOCUMENT, DB_URI, PRE_DICT, LEECH_DICT, PAID_USERS, CAP_DICT
+from bot import AS_DOC_USERS, AS_MEDIA_USERS, dispatcher, AS_DOCUMENT, DB_URI, PRE_DICT, LEECH_DICT, PAID_USERS, CAP_DICT, REM_DICT
 from bot.helper.telegram_helper.message_utils import sendMessage, sendMarkup, editMessage, sendPhoto
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
@@ -48,6 +48,9 @@ def getleechinfo(from_user):
 
     if dumpid != "Not Exists":
         buttons.sbutton("Delete DumpID", f"leechset {user_id} dump")
+
+    if remname != "Not Exists": 
+        buttons.sbutton("Delete Remname", f"leechset {user_id} rem")
 
     button = buttons.build_menu(2)
 
@@ -129,6 +132,12 @@ def setLeechType(update, context):
         if DB_URI:
             DbManger().user_dump(user_id, None)
         query.answer(text="Your Dump ID is Successfully Deleted!", show_alert=True)
+        editLeechType(message, query)
+    elif data[2] == "rem":
+        REM_DICT.pop(user_id)
+        if DB_URI:
+            DbManger().user_rem(user_id, None)
+        query.answer(text="Your Remname is Successfully Deleted!", show_alert=True)
         editLeechType(message, query)
     else:
         query.answer()
