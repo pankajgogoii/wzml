@@ -1,7 +1,7 @@
 from os import path as ospath, makedirs
 from psycopg2 import connect, DatabaseError
 
-from bot import DB_URI, AUTHORIZED_CHATS, SUDO_USERS, AS_DOC_USERS, AS_MEDIA_USERS, rss_dict, LOGGER, botname, LEECH_LOG, PRE_DICT, LEECH_DICT, PAID_USERS, CAP_DICT, REM_DICT
+from bot import DB_URI, AUTHORIZED_CHATS, SUDO_USERS, AS_DOC_USERS, AS_MEDIA_USERS, rss_dict, LOGGER, botname, LEECH_LOG, PRE_DICT, LEECH_DICT, PAID_USERS, CAP_DICT, REM_DICT, SUF_DICT
 
 class DbManger:
     def __init__(self):
@@ -30,6 +30,7 @@ class DbManger:
                  media boolean DEFAULT FALSE,
                  doc boolean DEFAULT FALSE,
                  pre text DEFAULT NULL,
+                 suf text DEFAULT NULL,
                  cap text DEFAULT NULL,
                  dump text DEFAULT NULL,
                  rem text DEFAULT NULL,
@@ -83,6 +84,8 @@ class DbManger:
                     LEECH_LOG.add(row[0])
                 if row[11]:
                     REM_DICT[row[0]] = row[11]
+                if row[12]:
+                    SUF_DICT[row[0]] = row[12]
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
         self.cur.execute("SELECT * FROM rss")
@@ -173,6 +176,17 @@ class DbManger:
         else:
             sql = 'UPDATE users SET pre = %s WHERE uid = %s'
         self.cur.execute(sql, (user_pre, user_id))
+        self.conn.commit()
+        self.disconnect()
+
+   def user_suf(self, user_id: int, user_suf):
+        if self.err:
+            return
+        elif not self.user_check(user_id):
+            sql = 'INSERT INTO users (suf, uid) VALUES (%s, %s)'
+        else:
+            sql = 'UPDATE users SET suf = %s WHERE uid = %s'
+        self.cur.execute(sql, (user_suf, user_id))
         self.conn.commit()
         self.disconnect()
 
