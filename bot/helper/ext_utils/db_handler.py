@@ -178,17 +178,31 @@ class DbManger:
         self.cur.execute(sql, (user_pre, user_id))
         self.conn.commit()
         self.disconnect()
+        
 
-   def user_suf(self, user_id: int, user_suf):
+
+        
+        
+    def user_suf(self, user_id: int, user_suf):
+
         if self.err:
+
             return
+
         elif not self.user_check(user_id):
+
             sql = 'INSERT INTO users (suf, uid) VALUES (%s, %s)'
+
         else:
+
             sql = 'UPDATE users SET suf = %s WHERE uid = %s'
+
         self.cur.execute(sql, (user_suf, user_id))
+
         self.conn.commit()
+
         self.disconnect()
+
 
 
     def user_cap(self, user_id: int, user_cap):
