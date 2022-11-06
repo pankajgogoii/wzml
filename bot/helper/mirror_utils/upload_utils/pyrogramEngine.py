@@ -1,4 +1,5 @@
 import re
+import os
 from logging import getLogger, ERROR
 from os import remove as osremove, walk, path as ospath, rename as osrename
 from time import time, sleep
@@ -6,7 +7,7 @@ from pyrogram.errors import FloodWait, RPCError
 from PIL import Image
 from threading import RLock
 from bot import AS_DOCUMENT, AS_DOC_USERS, AS_MEDIA_USERS, EXTENSION_FILTER, \
-                app, LEECH_LOG, BOT_PM, tgBotMaxFileSize, premium_session, CAPTION_FONT, PRE_DICT, LEECH_DICT, LOG_LEECH, CAP_DICT, REM_DICT
+                app, LEECH_LOG, BOT_PM, tgBotMaxFileSize, premium_session, CAPTION_FONT, PRE_DICT, LEECH_DICT, LOG_LEECH, CAP_DICT, REM_DICT, SUF_DICT
 from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, get_path_size, clean_unwanted
 from bot.helper.ext_utils.bot_utils import get_readable_file_size
 from pyrogram.types import Message
@@ -85,12 +86,16 @@ class TgUploader:
         CAPTION_X = caption
         remname = REM_DICT.get(self.__listener.message.from_user.id, "")
         REMNAME_X = remname
-        if len(PRENAME_X) != 0:
+        suffix = SUF_DICT.get(self.__listener.message.from_user.id, "")
+        SUFFIX_X = suffix
+        if len(PRENAME_X) != 0 or len(SUFFIX_X) !=0:
             if file_.startswith('www'):
                 file_ = ' '.join(file_.split()[1:])
                 rm_word = f"{REMNAME_X}"
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
+                suffix = f" " + f"{SUFFIX_X}"
+                file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{PRENAME_X}" + file_.strip('-').strip('_')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
@@ -101,7 +106,9 @@ class TgUploader:
                 rm_word = f"{REMNAME_X}"
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
-                file_ = f"{PRENAME_X}" + " " + file_.strip('_').strip('')
+                suffix = f" " + f"{SUFFIX_X}"
+                file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
+                file_ = f"{PRENAME_X}" + " " + file_.strip('-').strip('_')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
