@@ -101,16 +101,13 @@ class TgUploader:
                 rm_word = f"{REMNAME_X}"
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
-                file_ = f"{PRENAME_X}" + " " + file_.strip('-').strip('_')
+                file_ = f"{PRENAME_X}" + " " + file_.strip('_').strip('')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
                 osrename(up_path, new_path)
                 up_path = new_path
         else:
-            rm_word = f"{REMNAME_X}"
-            file_ = re.sub(rm_word, '', file_)
-            file_ = re.sub("\s\s+", " ", file_)
             cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
             cap = f"\n\n{CAPTION_X}\n\n"
         # if CUSTOM_FILENAME is not None and prefix == '':
