@@ -95,7 +95,6 @@ class TgUploader:
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
                 suffix = f" " + f"{SUFFIX_X}"
-                #prefix = f"{PRENAME_X}"
                 file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{PRENAME_X}" + file_.strip('-').strip('_')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
@@ -108,7 +107,6 @@ class TgUploader:
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
                 suffix = f" " + f"{SUFFIX_X}"
-                #prefix = f"{PRENAME_X}"
                 file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{PRENAME_X}" + " " + file_.strip('-').strip('_')
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
