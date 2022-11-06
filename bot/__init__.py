@@ -36,6 +36,7 @@ def getConfig(name: str):
     return environ[name]
 
 PRE_DICT = {}
+SUF_DICT = {}
 CAP_DICT = {}
 LEECH_DICT = {}
 REM_DICT = {}
