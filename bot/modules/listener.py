@@ -1,3 +1,5 @@
+import os
+import re
 from requests import utils as rutils
 from subprocess import run as srun
 import random
@@ -19,7 +21,8 @@ from bot import NAME_FONT, bot, Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FO
                 download_dict, download_dict_lock, TG_SPLIT_SIZE, LOGGER, DB_URI, INCOMPLETE_TASK_NOTIFIER, \
                 LEECH_LOG, BOT_PM, MIRROR_LOGS, SOURCE_LINK, AUTO_DELETE_UPLOAD_MESSAGE_DURATION, \
                 MIRROR_ENABLED, LEECH_ENABLED, WATCH_ENABLED, CLONE_ENABLED, LINK_LOGS, EMOJI_THEME, \
-                MIRROR_LOG_URL, LEECH_LOG_URL, TITLE_NAME, LEECH_LOG_INDEXING, PICS, NAME_FONT, FORCE_BOT_PM, DISABLE_DRIVE_LINK, PRE_DICT
+                MIRROR_LOG_URL, LEECH_LOG_URL, TITLE_NAME, LEECH_LOG_INDEXING, PICS, NAME_FONT, FORCE_BOT_PM, DISABLE_DRIVE_LINK, PRE_DICT, \
+                REM_DICT, SUF_DICT
 from bot.helper.ext_utils.bot_utils import is_url, is_magnet, is_gdtot_link, is_mega_link, is_gdrive_link, get_content_type, get_readable_time
 from bot.helper.ext_utils.fs_utils import get_base_name, get_path_size, split_file, clean_download, clean_target
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException, NotSupportedExtractionArchive
@@ -237,12 +240,26 @@ class MirrorLeechListener:
         reply_to = self.message.reply_to_message
         prefix = PRE_DICT.get(self.message.from_user.id, "")
         PRENAME_X = prefix
+        suffix = SUF_DICT.get(self.message.from_user.id, "")
+        SUFFIX_X = suffix
+        remname = REM_DICT.get(self.message.from_user.id, "")
+        REMNAME_X = remname
         file_ = escape(name)
-        if len(PRENAME_X) != 0:
+        if len(PRENAME_X) != 0 or len(SUFFIX_X) != 0:
             if file_.startswith('www'): 
                 file_ = ' '.join(file_.split()[1:])
+                rm_word = f"{REMNAME_X}"
+                file_ = re.sub(rm_word, '', file_)
+                file_ = re.sub("\s\s+", " ", file_)
+                suffix = f" " + f"{SUFFIX_X}"
+                file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{PRENAME_X}"+ file_.strip('-').strip('_')
             else:
+                rm_word = f"{REMNAME_X}"
+                file_ = re.sub(rm_word, '', file_)
+                file_ = re.sub("\s\s+", " ", file_)
+                suffix = f" " + f"{SUFFIX_X}"
+                file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{PRENAME_X} {file_}"
         else:
           file_ = f"{file_}"
