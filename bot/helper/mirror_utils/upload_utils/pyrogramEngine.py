@@ -95,8 +95,19 @@ class TgUploader:
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
                 suffix = f" " + f"{SUFFIX_X}"
-                file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{PRENAME_X}" + file_.strip('-').strip('_')
+                sufLen = len(suffix)
+                fileDict = file_.split('.')
+                _extIn = 1 + len(fileDict[-1])
+                _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
+                if not _extOutName.endswith(suffix):
+                    _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
+                    if len(_extOutName) > (64 - (sufLen + _extIn)):
+                        _newExtFileName = (
+                            _extOutName[: 64 - (sufLen + _extIn)]
+                            + f"{suffix}.{fileDict[-1]}"
+                                    )
+                #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
+                file_ = f"{PRENAME_X}" + f"_newExtFileName"
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
@@ -107,8 +118,19 @@ class TgUploader:
                 file_ = re.sub(rm_word, '', file_)
                 file_ = re.sub("\s\s+", " ", file_)
                 suffix = f" " + f"{SUFFIX_X}"
-                file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{PRENAME_X}" + " " + file_.strip('-').strip('_')
+                sufLen = len(suffix)
+                fileDict = file_.split('.')
+                _extIn = 1 + len(fileDict[-1])
+                _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
+                if not _extOutName.endswith(suffix):
+                    _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
+                    if len(_extOutName) > (64 - (sufLen + _extIn)):
+                        _newExtFileName = (
+                            _extOutName[: 64 - (sufLen + _extIn)]
+                            + f"{suffix}.{fileDict[-1]}"
+                                    )
+                #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
+                file_ = f"{PRENAME_X}" + f"_newExtFileName"
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
