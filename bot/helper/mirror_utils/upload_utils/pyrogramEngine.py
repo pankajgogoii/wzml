@@ -107,6 +107,8 @@ class TgUploader:
                             + f"{suffix}.{fileDict[-1]}"
                                     )
                         #_newExtFileName = file_
+                else: pass
+
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{_newExtFileName}"
                 file_ = f"{PRENAME_X} {file_}"
@@ -132,6 +134,7 @@ class TgUploader:
                             + f"{suffix}.{fileDict[-1]}"
                                     )
                         #_newExtFileName = file_
+                else: pass
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{_newExtFileName}"
                 file_ = f"{PRENAME_X} {file_}"
