@@ -91,14 +91,14 @@ class TgUploader:
         if len(PRENAME_X) != 0 or len(SUFFIX_X) !=0:
             if file_.startswith('www'):
                 file_ = ' '.join(file_.split()[1:])
-                rm_word = f"{REMNAME_X}"
-                file_ = re.sub(rm_word, '', file_)
-                file_ = re.sub("\s\s+", " ", file_)
                 suffix = f" " + f"{SUFFIX_X}"
                 sufLen = len(suffix)
                 fileDict = file_.split('.')
                 _extIn = 1 + len(fileDict[-1])
                 _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
+                rm_word = f"{REMNAME_X}"
+                _extOutName = re.sub(rm_word, '', _extOutName)
+                _extOutName = re.sub("\s\s+", " ", _extOutName)
                 if not _extOutName.endswith(suffix):
                     _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
                     if len(_extOutName) > (64 - (sufLen + _extIn)):
@@ -107,21 +107,21 @@ class TgUploader:
                             + f"{suffix}.{fileDict[-1]}"
                                     )
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{PRENAME_X}" + f"_newExtFileName"
+                file_ = f"{PRENAME_X} + f"{_newExtFileName}"
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
                 osrename(up_path, new_path)
                 up_path = new_path
             else:
-                rm_word = f"{REMNAME_X}"
-                file_ = re.sub(rm_word, '', file_)
-                file_ = re.sub("\s\s+", " ", file_)
                 suffix = f" " + f"{SUFFIX_X}"
                 sufLen = len(suffix)
                 fileDict = file_.split('.')
                 _extIn = 1 + len(fileDict[-1])
                 _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
+                rm_word = f"{REMNAME_X}"
+                _extOutName = re.sub(rm_word, '', _extOutName)
+                _extOutName = re.sub("\s\s+", " ", _extOutName)
                 if not _extOutName.endswith(suffix):
                     _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
                     if len(_extOutName) > (64 - (sufLen + _extIn)):
@@ -129,9 +129,8 @@ class TgUploader:
                             _extOutName[: 64 - (sufLen + _extIn)]
                             + f"{suffix}.{fileDict[-1]}"
                                     )
-                        
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{_newExtFileName}"
+                file_ = f"{PRENAME_X} + f"{_newExtFileName}"
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
