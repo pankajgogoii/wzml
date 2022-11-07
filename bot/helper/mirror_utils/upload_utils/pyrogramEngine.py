@@ -106,8 +106,9 @@ class TgUploader:
                             _extOutName[: 64 - (sufLen + _extIn)]
                             + f"{suffix}.{fileDict[-1]}"
                                     )
+                        _newExtFileName = file_
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{PRENAME_X} + f"{_newExtFileName}"
+                file_ = f"{PRENAME_X} {file_}"
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
@@ -129,8 +130,9 @@ class TgUploader:
                             _extOutName[: 64 - (sufLen + _extIn)]
                             + f"{suffix}.{fileDict[-1]}"
                                     )
+                        _newExtFileName = file_
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{PRENAME_X} + f"{_newExtFileName}"
+                file_ = f"{PRENAME_X} {file_}"
                 cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
                 cap = f"\n\n{CAPTION_X}\n\n"
                 new_path = ospath.join(dirpath, file_)
