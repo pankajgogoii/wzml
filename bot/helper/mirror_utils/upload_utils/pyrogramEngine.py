@@ -99,15 +99,15 @@ class TgUploader:
                 rm_word = f"{REMNAME_X}"
                 _extOutName = re.sub(rm_word, '', _extOutName)
                 _extOutName = re.sub("\s\s+", " ", _extOutName)
-                if not _extOutName.endswith(suffix):
-                    _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
-                    if len(_extOutName) > (64 - (sufLen + _extIn)):
-                        _newExtFileName = (
-                            _extOutName[: 64 - (sufLen + _extIn)]
-                            + f"{suffix}.{fileDict[-1]}"
-                                    )
+                #if not _extOutName.endswith(suffix):
+                _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
+                if len(_extOutName) > (64 - (sufLen + _extIn)):
+                    _newExtFileName = (
+                        _extOutName[: 64 - (sufLen + _extIn)]
+                        + f"{suffix}.{fileDict[-1]}"
+                                )
                         #_newExtFileName = file_
-                else: pass
+         
 
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{_newExtFileName}"
@@ -126,15 +126,13 @@ class TgUploader:
                 rm_word = f"{REMNAME_X}"
                 _extOutName = re.sub(rm_word, '', _extOutName)
                 _extOutName = re.sub("\s\s+", " ", _extOutName)
-                if not _extOutName.endswith(suffix):
-                    _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
-                    if len(_extOutName) > (64 - (sufLen + _extIn)):
-                        _newExtFileName = (
-                            _extOutName[: 64 - (sufLen + _extIn)]
-                            + f"{suffix}.{fileDict[-1]}"
-                                    )
-                        #_newExtFileName = file_
-                else: pass
+                #if not _extOutName.endswith(suffix):
+                _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
+                if len(_extOutName) > (64 - (sufLen + _extIn)):
+                    _newExtFileName = (
+                        _extOutName[: 64 - (sufLen + _extIn)]
+                        + f"{suffix}.{fileDict[-1]}"
+                                )
                 #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
                 file_ = f"{_newExtFileName}"
                 file_ = f"{PRENAME_X} {file_}"
